@@ -663,12 +663,12 @@ export const handleSendChatFn = () => async (text: string) => {
     const userMessageContent: Message['content'] = modalImage
       ? [
           { type: 'text' as const, text: newMessage },
-          { type: 'image' as const, image: modalImage },
+          { type: 'image' as const, text: '', image: modalImage },
         ]
       : newMessage
 
     homeStore.getState().upsertMessage({
-      role: 'user',
+      role: 'user' as Message['role'],
       content: userMessageContent,
       timestamp: timestamp,
     })
@@ -743,13 +743,13 @@ export const handleReceiveTextFromWsFn =
 
         homeStore.getState().upsertMessage({
           id: lastMessage.id,
-          role: role,
+          role: role as Message['role'],
           content: lastContent + text,
         })
       } else {
         // 新しいメッセージを追加（新規IDを生成）
         homeStore.getState().upsertMessage({
-          role: role,
+          role: role as Message['role'],
           content: text,
         })
         wsManager?.setTextBlockStarted(true)
@@ -851,7 +851,7 @@ export const handleReceiveTextFromRtFn = () => {
         }
       } else if (type === 'response.content_part.done' && text !== undefined) {
         homeStore.getState().upsertMessage({
-          role: role,
+          role: role as Message['role'],
           content: text,
         })
       }

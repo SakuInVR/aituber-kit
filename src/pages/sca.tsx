@@ -1,8 +1,8 @@
-import React from 'react';
-import SCAClient from '../components/sca/SCAClient';
+import React from 'react'
+import SCAClient from '../components/sca/SCAClient'
 
 const SCAPage: React.FC = () => {
-  return <SCAClient />;
-};
+  return <SCAClient />
+}
 
-export default SCAPage; 
+export default SCAPage

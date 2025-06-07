@@ -320,5 +320,16 @@
   "CustomAPIDescription": "注意: メッセージは自動的にリクエストボディに含まれます。ストリーミングモードでは、サーバーがtext/event-streamを返す必要があります。",
   "XAIAPIKeyLabel": "xAI APIキー",
   "OpenRouterAPIKeyLabel": "OpenRouter APIキー",
-  "OpenRouterModelNameInstruction": "OpenRouterからモデル識別子を入力してください（例： \"openai/gpt-4o\", \"mistralai/mistral-large-latest\"）。モデル識別子はOpenRouterモデルページで確認できます。"
+  "OpenRouterModelNameInstruction": "OpenRouterからモデル識別子を入力してください（例： \"openai/gpt-4o\", \"mistralai/mistral-large-latest\"）。モデル識別子はOpenRouterモデルページで確認できます。",
+  "AutoChatSettings": "自動会話設定",
+  "EnableAutoChat": "自動会話を有効にする",
+  "EnableAutoChatInfo": "配信中の沈黙を検知し、AIキャラクターが自動的に会話を開始します。",
+  "SilenceThreshold": "沈黙検知の閾値",
+  "SilenceThresholdInfo": "この時間（秒）以上沈黙が続くと、AIキャラクターが自動的に会話を開始します。",
+  "StreamTheme": "配信テーマ",
+  "StreamThemeInfo": "現在の配信テーマを入力すると、AIキャラクターがより適切な会話を生成します。",
+  "StreamThemePlaceholder": "例：雑談、ゲーム実況、歌枠など",
+  "RemainingTime": "残り時間: {{time}}秒",
+  "GeneratingAutoChat": "自動会話を生成中です...",
+  "AutoChatProvider": "AIプロバイダー（Gemini/OpenAI）"
 }

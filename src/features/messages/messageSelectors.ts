@@ -42,7 +42,7 @@ export const messageSelectors = {
         // 最後のメッセージだけそのまま利用する（= 最後のメッセージだけマルチモーダルの対象となる）
         const isLastMessage = index === messages.length - 1
         const messageText = Array.isArray(message.content)
-          ? message.content[0].text
+          ? (message.content[0].text ?? '')
           : message.content || ''
 
         let content: Message['content']
@@ -53,7 +53,11 @@ export const messageSelectors = {
           if (isLastMessage && Array.isArray(message.content)) {
             content = [
               { type: 'text', text: content },
-              { type: 'image', image: message.content[1].image },
+              {
+                type: 'image',
+                text: '',
+                image: message.content[1].image ?? '',
+              },
             ]
           }
         } else {
@@ -80,7 +84,7 @@ export const messageSelectors = {
           item.content[0] &&
           item.content[1]
         ) {
-          lastImageUrl = item.content[1].image
+          lastImageUrl = item.content[1].image ?? ''
         }
 
         const lastItem = acc[acc.length - 1]
@@ -123,13 +127,16 @@ export const messageSelectors = {
             acc.push({
               ...item,
               content: [
-                { type: 'text', text: text.trim() },
-                { type: 'image', image: lastImageUrl },
+                { type: 'text', text: String((text ?? '').trim()) },
+                { type: 'image', text: '', image: lastImageUrl ?? '' },
               ],
             })
             lastImageUrl = ''
           } else {
-            acc.push({ ...item, content: text.trim() })
+            acc.push({
+              ...item,
+              content: [{ type: 'text', text: String((text ?? '').trim()) }],
+            })
           }
         }
         return acc
@@ -146,7 +153,7 @@ export const messageSelectors = {
           ? ''
           : typeof message.content === 'string'
             ? message.content
-            : message.content[0].text,
+            : (message.content[0].text ?? ''),
     }))
   },
 
@@ -166,10 +173,16 @@ export const messageSelectors = {
           if (content.type === 'image') {
             return {
               type: 'image',
+              text: '',
               image: '[image data omitted]',
             }
           }
-          return content
+          // textメッセージも必ずtext: stringで返す
+          return {
+            type: content.type,
+            text: content.text ?? '',
+            image: content.image,
+          }
         }),
       }
     }

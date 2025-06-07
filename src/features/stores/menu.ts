@@ -11,6 +11,7 @@ type SettingsTabKey =
   | 'slide'
   | 'log'
   | 'other'
+  | 'autoChat'
 interface MenuState {
   showWebcam: boolean
   showCapture: boolean
@@ -30,3 +31,4 @@ const menuStore = create<MenuState>((set, get) => ({
 }))
 
 export default menuStore
+export type { SettingsTabKey }

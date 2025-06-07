@@ -57,7 +57,10 @@ const getLastMessages = (
       combinedContent += '\n' + message.content
     } else {
       if (lastRole !== null) {
-        returnMessages.push({ role: lastRole, content: combinedContent })
+        returnMessages.push({
+          role: lastRole as Message['role'],
+          content: combinedContent,
+        })
       }
       lastRole = message.role
       combinedContent = message.content
@@ -69,7 +72,10 @@ const getLastMessages = (
 
     // 最後のメッセージの場合、現在の内容を追加
     if (index === filteredMessages.length - 1) {
-      returnMessages.push({ role: lastRole, content: combinedContent })
+      returnMessages.push({
+        role: lastRole as Message['role'],
+        content: combinedContent,
+      })
     }
   })
 

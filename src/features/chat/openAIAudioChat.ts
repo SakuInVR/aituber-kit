@@ -56,7 +56,7 @@ export async function getOpenAIAudioChatResponseStream(
               homeStore.getState().upsertMessage({
                 id: audio.id, // これで同一メッセージを更新
                 role: 'assistant',
-                audio: { id: audio.id },
+                audio: audio.id,
                 content: '',
               })
             }

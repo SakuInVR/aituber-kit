@@ -198,8 +198,12 @@ export type SettingsState = APIKeys &
   ModelProvider &
   Integrations &
   Character &
-  General &
-  ModelType
+  General & {
+    modelType: 'vrm' | 'live2d'
+    autoChatEnabled: boolean
+    autoChatSilenceThreshold: number
+    autoChatCurrentTheme: string
+  }
 
 const settingsStore = create<SettingsState>()(
   persist(
@@ -474,6 +478,11 @@ const settingsStore = create<SettingsState>()(
       relaxedMotionGroup: process.env.NEXT_PUBLIC_RELAXED_MOTION_GROUP || '',
       surprisedMotionGroup:
         process.env.NEXT_PUBLIC_SURPRISED_MOTION_GROUP || '',
+
+      // 自動会話設定
+      autoChatEnabled: false,
+      autoChatSilenceThreshold: 20000, // 20秒
+      autoChatCurrentTheme: '',
     }),
     {
       name: 'aitube-kit-settings',
@@ -617,6 +626,9 @@ const settingsStore = create<SettingsState>()(
           state.includeSystemMessagesInCustomApi,
         initialSpeechTimeout: state.initialSpeechTimeout,
         chatLogWidth: state.chatLogWidth,
+        autoChatEnabled: state.autoChatEnabled,
+        autoChatSilenceThreshold: state.autoChatSilenceThreshold,
+        autoChatCurrentTheme: state.autoChatCurrentTheme,
       }),
     }
   )

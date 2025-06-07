@@ -107,7 +107,7 @@ const MessageReceiver = () => {
                 content: capturedImage
                   ? [
                       { type: 'text', text: message.message },
-                      { type: 'image', image: capturedImage },
+                      { type: 'image', text: '', image: capturedImage },
                     ]
                   : message.message,
               },

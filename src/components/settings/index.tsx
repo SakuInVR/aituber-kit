@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import menuStore from '@/features/stores/menu'
+import type { SettingsTabKey } from '@/features/stores/menu'
 import Image from 'next/image'
 
 import { GitHubLink } from '../githubLink'
@@ -15,6 +16,7 @@ import Slide from './slide'
 import Log from './log'
 import Other from './other'
 import SpeechInput from './speechInput'
+import AutoChat from './autoChat'
 
 type Props = {
   onClickClose: () => void
@@ -46,20 +48,10 @@ const Header = ({ onClickClose }: Pick<Props, 'onClickClose'>) => {
 }
 
 // タブの定義
-type TabKey =
-  | 'description'
-  | 'based'
-  | 'character'
-  | 'ai'
-  | 'voice'
-  | 'youtube'
-  | 'slide'
-  | 'log'
-  | 'other'
-  | 'speechInput'
+// type TabKey = ... ←この定義を削除
 
 // アイコンのパスマッピング
-const tabIconMapping: Record<TabKey, string> = {
+const tabIconMapping: Record<SettingsTabKey, string> = {
   description: '/images/setting-icons/description.svg',
   based: '/images/setting-icons/basic-settings.svg',
   character: '/images/setting-icons/character-settings.svg',
@@ -70,16 +62,17 @@ const tabIconMapping: Record<TabKey, string> = {
   log: '/images/setting-icons/conversation-history.svg',
   other: '/images/setting-icons/other-settings.svg',
   speechInput: '/images/setting-icons/microphone-settings.svg',
+  autoChat: '/images/setting-icons/auto-chat-settings.svg',
 }
 
 const Main = () => {
   const { t } = useTranslation()
   const activeTab = menuStore((state) => state.activeSettingsTab)
-  const setActiveTab = (tab: TabKey) => {
+  const setActiveTab = (tab: SettingsTabKey) => {
     menuStore.setState({ activeSettingsTab: tab })
   }
 
-  const tabs: { key: TabKey; label: string }[] = [
+  const tabs: { key: SettingsTabKey; label: string }[] = [
     {
       key: 'description',
       label: t('Description'),
@@ -120,6 +113,10 @@ const Main = () => {
       key: 'other',
       label: t('OtherSettings'),
     },
+    {
+      key: 'autoChat',
+      label: t('AutoChatSettings'),
+    },
   ]
 
   const renderTabContent = () => {
@@ -144,6 +141,8 @@ const Main = () => {
         return <Other />
       case 'speechInput':
         return <SpeechInput />
+      case 'autoChat':
+        return <AutoChat />
     }
   }
 

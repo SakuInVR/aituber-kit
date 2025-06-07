@@ -1,58 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
 // スクリプトの型定義
 interface Script {
-  id: string;
-  title: string;
-  content: string;
-  emotion: string;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  title: string
+  content: string
+  emotion: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 interface ScriptManagerProps {
-  onSelectScript: (script: Script) => void;
+  onSelectScript: (script: Script) => void
 }
 
-const STORAGE_KEY = 'aituber-scripts';
+const STORAGE_KEY = 'aituber-scripts'
 
 const ScriptManager: React.FC<ScriptManagerProps> = ({ onSelectScript }) => {
-  const [scripts, setScripts] = useState<Script[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentScript, setCurrentScript] = useState<Script | null>(null);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [emotion, setEmotion] = useState('neutral');
+  const [scripts, setScripts] = useState<Script[]>([])
+  const [isEditing, setIsEditing] = useState(false)
+  const [currentScript, setCurrentScript] = useState<Script | null>(null)
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [emotion, setEmotion] = useState('neutral')
 
   // ローカルストレージからスクリプトを読み込む
   useEffect(() => {
     const loadScripts = () => {
       try {
-        const savedScripts = localStorage.getItem(STORAGE_KEY);
+        const savedScripts = localStorage.getItem(STORAGE_KEY)
         if (savedScripts) {
           const parsedScripts = JSON.parse(savedScripts).map((script: any) => ({
             ...script,
             createdAt: new Date(script.createdAt),
-            updatedAt: new Date(script.updatedAt)
-          }));
-          setScripts(parsedScripts);
+            updatedAt: new Date(script.updatedAt),
+          }))
+          setScripts(parsedScripts)
         }
       } catch (error) {
-        console.error('スクリプトの読み込みに失敗しました:', error);
+        console.error('スクリプトの読み込みに失敗しました:', error)
       }
-    };
+    }
 
-    loadScripts();
-  }, []);
+    loadScripts()
+  }, [])
 
   // スクリプトをローカルストレージに保存
   const saveScripts = (newScripts: Script[]) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newScripts));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newScripts))
     } catch (error) {
-      console.error('スクリプトの保存に失敗しました:', error);
+      console.error('スクリプトの保存に失敗しました:', error)
     }
-  };
+  }
 
   // 新規スクリプトの作成
   const createScript = () => {
@@ -62,56 +62,56 @@ const ScriptManager: React.FC<ScriptManagerProps> = ({ onSelectScript }) => {
       content,
       emotion,
       createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    const newScripts = [...scripts, newScript];
-    setScripts(newScripts);
-    saveScripts(newScripts);
-    setTitle('');
-    setContent('');
-    setEmotion('neutral');
-    setIsEditing(false);
-  };
+      updatedAt: new Date(),
+    }
+    const newScripts = [...scripts, newScript]
+    setScripts(newScripts)
+    saveScripts(newScripts)
+    setTitle('')
+    setContent('')
+    setEmotion('neutral')
+    setIsEditing(false)
+  }
 
   // スクリプトの編集
   const editScript = (script: Script) => {
-    setCurrentScript(script);
-    setTitle(script.title);
-    setContent(script.content);
-    setEmotion(script.emotion);
-    setIsEditing(true);
-  };
+    setCurrentScript(script)
+    setTitle(script.title)
+    setContent(script.content)
+    setEmotion(script.emotion)
+    setIsEditing(true)
+  }
 
   // スクリプトの更新
   const updateScript = () => {
-    if (!currentScript) return;
+    if (!currentScript) return
 
-    const updatedScripts = scripts.map(script => 
+    const updatedScripts = scripts.map((script) =>
       script.id === currentScript.id
         ? {
             ...script,
             title: title || '無題のスクリプト',
             content,
             emotion,
-            updatedAt: new Date()
+            updatedAt: new Date(),
           }
         : script
-    );
-    setScripts(updatedScripts);
-    saveScripts(updatedScripts);
-    setTitle('');
-    setContent('');
-    setEmotion('neutral');
-    setIsEditing(false);
-    setCurrentScript(null);
-  };
+    )
+    setScripts(updatedScripts)
+    saveScripts(updatedScripts)
+    setTitle('')
+    setContent('')
+    setEmotion('neutral')
+    setIsEditing(false)
+    setCurrentScript(null)
+  }
 
   // スクリプトの削除
   const deleteScript = (id: string) => {
-    const newScripts = scripts.filter(script => script.id !== id);
-    setScripts(newScripts);
-    saveScripts(newScripts);
-  };
+    const newScripts = scripts.filter((script) => script.id !== id)
+    setScripts(newScripts)
+    saveScripts(newScripts)
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
@@ -121,7 +121,7 @@ const ScriptManager: React.FC<ScriptManagerProps> = ({ onSelectScript }) => {
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-2">保存済みスクリプト</h3>
         <div className="space-y-2">
-          {scripts.map(script => (
+          {scripts.map((script) => (
             <div
               key={script.id}
               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -212,11 +212,11 @@ const ScriptManager: React.FC<ScriptManagerProps> = ({ onSelectScript }) => {
             {isEditing && (
               <button
                 onClick={() => {
-                  setIsEditing(false);
-                  setCurrentScript(null);
-                  setTitle('');
-                  setContent('');
-                  setEmotion('neutral');
+                  setIsEditing(false)
+                  setCurrentScript(null)
+                  setTitle('')
+                  setContent('')
+                  setEmotion('neutral')
                 }}
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
               >
@@ -233,7 +233,7 @@ const ScriptManager: React.FC<ScriptManagerProps> = ({ onSelectScript }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ScriptManager; 
+export default ScriptManager

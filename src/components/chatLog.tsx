@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { EMOTIONS } from '@/features/messages/messages'
+import { useAutoChat } from '@/app/hooks/useAutoChat'
 
 import homeStore from '@/features/stores/home'
 import settingsStore from '@/features/stores/settings'
@@ -18,6 +19,8 @@ export const ChatLog = () => {
   )
 
   const [isDragging, setIsDragging] = useState<boolean>(false)
+
+  useAutoChat()
 
   useEffect(() => {
     chatScrollRef.current?.scrollIntoView({
@@ -91,12 +94,20 @@ export const ChatLog = () => {
                 <>
                   <Chat
                     role={msg.role}
-                    message={msg.content ? msg.content[0].text : ''}
+                    message={
+                      msg.content && Array.isArray(msg.content)
+                        ? String(msg.content[0]?.text ?? '')
+                        : ''
+                    }
                     characterName={characterName}
                   />
                   <ChatImage
                     role={msg.role}
-                    imageUrl={msg.content ? msg.content[1].image : ''}
+                    imageUrl={
+                      msg.content && Array.isArray(msg.content)
+                        ? (msg.content[1]?.image ?? '')
+                        : ''
+                    }
                     characterName={characterName}
                   />
                 </>
@@ -116,6 +127,10 @@ export const ChatLog = () => {
       </div>
     </div>
   )
+}
+
+function safeText(val: string | undefined): string {
+  return val ?? ''
 }
 
 const Chat = ({
