@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import settingsStore from '@/features/stores/settings'
-import AutoChat from '../settings/autoChat'
-import { useAutoChat } from '@/app/hooks/useAutoChat'
+import { AutoChatSettings } from '../settings/AutoChatSettings'
 import { useAutoChatStore } from '@/app/features/stores/autoChat'
 import homeStore from '@/features/stores/home'
 
@@ -53,7 +52,6 @@ const COMMENTS = [
 const defaultClientId = process.env.NEXT_PUBLIC_CLIENT_ID || ''
 
 const Cockpit: React.FC = () => {
-  const { generateAutoChat, isGenerating } = useAutoChat()
   const [clientId, setClientId] = useState(defaultClientId)
   const [apiEndpoint, setApiEndpoint] = useState(
     'http://localhost:3000/api/messages'
@@ -410,16 +408,7 @@ const Cockpit: React.FC = () => {
         </h1>
         {/* AutoChat（自動会話）設定セクション */}
         <section className="mb-8">
-          <AutoChat />
-          <div className="mt-4">
-            <button
-              className="bg-purple-500 text-white rounded px-4 py-2 hover:bg-purple-600"
-              onClick={generateAutoChat}
-              disabled={isGenerating}
-            >
-              {isGenerating ? '生成中...' : '自動会話テスト'}
-            </button>
-          </div>
+          <AutoChatSettings />
         </section>
         {/* モード切り替えスイッチ */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">

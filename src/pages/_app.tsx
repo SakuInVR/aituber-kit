@@ -9,8 +9,11 @@ import settingsStore from '@/features/stores/settings'
 import '@/styles/globals.css'
 import migrateStore from '@/utils/migrateStore'
 import i18n from '../lib/i18n'
+import { useAutoChat } from '@/app/hooks/useAutoChat'
 
 export default function App({ Component, pageProps }: AppProps) {
+  useAutoChat();
+
   useEffect(() => {
     const hs = homeStore.getState()
     const ss = settingsStore.getState()

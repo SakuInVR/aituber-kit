@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { speakCharacter } from '@/features/messages/speakCharacter'
 
 export const useAutoChat = () => {
-  const { isEnabled, silenceThreshold, currentTheme, provider } =
+  const { isEnabled, silenceThreshold, currentTheme, provider, setEnabled, mode } =
     useAutoChatStore()
   const [remainingTime, setRemainingTime] = useState<number | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -72,6 +72,12 @@ export const useAutoChat = () => {
         )
 
         toast.success('自動会話を生成しました')
+
+        // 一回限りモードならOFFにする
+        if (mode === 'once') {
+          setEnabled(false)
+        }
+
         return true
       }
       throw new Error('自動会話の生成に失敗しました')
@@ -84,44 +90,37 @@ export const useAutoChat = () => {
     } finally {
       setIsGenerating(false)
     }
-  }, [isEnabled, currentTheme, isGenerating, provider])
+  }, [isEnabled, currentTheme, isGenerating, provider, setEnabled, mode])
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
-    let intervalId: NodeJS.Timeout
+    let intervalId: NodeJS.Timeout | null = null;
 
     if (isEnabled) {
-      const startTime = Date.now()
-      setRemainingTime(silenceThreshold)
+      setRemainingTime(silenceThreshold);
+      let lastTriggered = Date.now();
 
-      intervalId = setInterval(() => {
-        const elapsed = Date.now() - startTime
-        const remaining = Math.max(0, silenceThreshold - elapsed)
-        setRemainingTime(remaining)
-
-        if (remaining === 0) {
-          clearInterval(intervalId)
+      intervalId = setInterval(async () => {
+        // 最新のisEnabledを毎回チェック
+        if (!useAutoChatStore.getState().isEnabled) return;
+        const elapsed = Date.now() - lastTriggered;
+        setRemainingTime(Math.max(0, silenceThreshold - elapsed));
+        if (elapsed >= silenceThreshold) {
+          lastTriggered = Date.now();
+          const success = await generateAutoChat();
+          if (!success) {
+            console.error('自動会話の生成に失敗しました');
+          }
+          setRemainingTime(silenceThreshold);
         }
-      }, 1000)
-
-      timeoutId = setTimeout(async () => {
-        const success = await generateAutoChat()
-        if (!success) {
-          console.error('自動会話の生成に失敗しました')
-        }
-        setRemainingTime(null)
-      }, silenceThreshold)
+      }, 1000);
     }
 
     return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
       if (intervalId) {
-        clearInterval(intervalId)
+        clearInterval(intervalId);
       }
-    }
-  }, [isEnabled, silenceThreshold, generateAutoChat])
+    };
+  }, [isEnabled, silenceThreshold, currentTheme, provider, generateAutoChat]);
 
   return {
     isEnabled,

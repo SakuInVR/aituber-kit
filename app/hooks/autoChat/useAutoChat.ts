@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
-import { useHomeStore } from '@/features/stores/home';
-import { Message, MessageContent } from '@/types/chat';
+import { useHomeStore } from '../../features/stores/home';
+import { Message, MessageContent } from '../../types/chat';
 import { speakCharacter } from '@/features/messages/speakCharacter';
 import { useAutoChatSettings } from './useAutoChatSettings';
 
@@ -38,6 +38,13 @@ export function useAutoChat() {
     }
   }, [chatLog]);
 
+  // isEnabledがfalseになったらisGeneratingもリセット
+  useEffect(() => {
+    if (!isEnabled) {
+      isGenerating.current = false;
+    }
+  }, [isEnabled]);
+
   // 自動会話生成
   const generateAutoChat = useCallback(async () => {
     if (!isEnabled || !theme || isGenerating.current) return;
@@ -71,7 +78,7 @@ export function useAutoChat() {
         };
 
         // メッセージを追加
-        setState((state) => ({
+        setState((state: { chatLog: Message[] }) => ({
           chatLog: [...state.chatLog, newMessage],
         }));
 

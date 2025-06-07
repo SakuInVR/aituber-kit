@@ -145,6 +145,11 @@ const homeStore = create<HomeState>()(
         if (state) {
           lastSavedLogLength = state.chatLog.length
           console.log('Rehydrated chat log length:', lastSavedLogLength)
+          // 一度だけリロード（localStorageフラグで制御）
+          if (typeof window !== 'undefined' && !localStorage.getItem('rehydrated_once')) {
+            localStorage.setItem('rehydrated_once', '1')
+            window.location.reload()
+          }
         }
       },
     }

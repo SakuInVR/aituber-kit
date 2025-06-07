@@ -1,6 +1,5 @@
 import { Switch } from '@headlessui/react'
 import { useAutoChatStore } from '@/app/features/stores/autoChat'
-import { useAutoChat } from '@/app/hooks/useAutoChat'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 
@@ -18,8 +17,6 @@ export const AutoChatSettings = () => {
     setProvider,
     setMode,
   } = useAutoChatStore()
-
-  const { remainingTime, isGenerating } = useAutoChat()
 
   // 状態表示用のstate
   const [status, setStatus] = useState<string | null>(null)
@@ -67,19 +64,16 @@ export const AutoChatSettings = () => {
         <span className="text-sm font-medium text-gray-700">
           {t('EnableAutoChat')}
         </span>
-        <Switch
-          checked={isEnabled}
-          onChange={handleToggle}
-          className={`${
-            isEnabled ? 'bg-blue-600' : 'bg-gray-200'
-          } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+        <button
+          onClick={() => handleToggle(!isEnabled)}
+          className={`px-4 py-2 rounded font-bold transition ${
+            isEnabled
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
         >
-          <span
-            className={`${
-              isEnabled ? 'translate-x-6' : 'translate-x-1'
-            } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-          />
-        </Switch>
+          {isEnabled ? 'ON' : 'OFF'}
+        </button>
       </div>
 
       {/* AIプロバイダー選択 */}
@@ -110,11 +104,6 @@ export const AutoChatSettings = () => {
           onChange={handleThresholdChange}
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
         />
-        {isEnabled && remainingTime !== null && (
-          <div className="text-sm text-gray-500">
-            {t('RemainingTime', { time: Math.ceil(remainingTime / 1000) })}
-          </div>
-        )}
       </div>
 
       {/* 配信テーマ入力 */}
@@ -154,11 +143,6 @@ export const AutoChatSettings = () => {
         </select>
       </div>
 
-      {/* 生成中の状態表示 */}
-      {isGenerating && (
-        <div className="text-sm text-blue-600">{t('GeneratingAutoChat')}</div>
-      )}
-
       {/* 状態表示・フィードバック */}
       {status && (
         <div
@@ -175,4 +159,4 @@ export const AutoChatSettings = () => {
       )}
     </div>
   )
-}
+} 

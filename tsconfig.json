@@ -20,12 +20,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./app/*"],
-      "@/types/*": ["./app/types/*"],
-      "@/features/*": ["./app/features/*"],
-      "@/hooks/*": ["./app/hooks/*"],
-      "@/components/*": ["./app/components/*"],
-      "@/lib/*": ["./app/lib/*"]
+      "@/*": ["./src/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/app/*": ["./src/app/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"],
   },
